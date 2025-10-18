@@ -15,6 +15,8 @@ async function sendMessage() {
       body: JSON.stringify({ message })
     });
 
+    if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+
     const data = await res.json();
     addMessage("Bot", data.response, "bot");
   } catch (error) {
@@ -31,3 +33,8 @@ function addMessage(sender, text, cls) {
   box.appendChild(msg);
   box.scrollTop = box.scrollHeight;
 }
+
+// Optional: Send message on Enter key
+document.getElementById("user-input").addEventListener("keydown", (e) => {
+  if (e.key === "Enter") sendMessage();
+});
