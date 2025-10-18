@@ -1,5 +1,4 @@
-// Replace this with your actual Render backend URL
-const API_URL = "https://genai-chatbot-backend-gm4l.onrender.com/";
+const API_URL = "https://genai-chatbot-backend-gm4l.onrender.com/chat";
 
 async function sendMessage() {
   const input = document.getElementById("user-input");
@@ -9,14 +8,19 @@ async function sendMessage() {
   addMessage("You", message, "user");
   input.value = "";
 
-  const res = await fetch(API_URL, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ message })
-  });
+  try {
+    const res = await fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message })
+    });
 
-  const data = await res.json();
-  addMessage("Bot", data.response, "bot");
+    const data = await res.json();
+    addMessage("Bot", data.response, "bot");
+  } catch (error) {
+    console.error("Error:", error);
+    addMessage("Bot", "Sorry, something went wrong.", "bot");
+  }
 }
 
 function addMessage(sender, text, cls) {
